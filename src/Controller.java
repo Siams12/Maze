@@ -84,7 +84,6 @@ public class Controller {
 		Scanner s = createScannerFile();
 		Maze mazeController = readMazeFromFile(s); 
 		View View = new View();
-	    View.mazeview(mazeController);
 	    Cords cords = mazeController.getCordsOut();
 	    while(cords != null){
 	    mazeController.set('1', cords.getStartRow(), cords.getStartCol());

@@ -132,15 +132,16 @@ public class Maze {
 		if (clearSpots >= 2) {
 			if (illegalMove(row+1, col) == false) {
 				 set('1', row+1, col);
-				 
+				  
 			}
-			if (illegalMove(row-1, col) == false) {
+			else if (illegalMove(row-1, col) == false) {
 				 set('1', row-1, col);
 			}
-			if (illegalMove(row, col+1) == false) {
+			else if (illegalMove(row, col+1) == false && illegalMove(row-1, col) != false) {
 				 set('1', row, col+1);
 			}
-			if (illegalMove(row, col-1) == false) {
+			else if (illegalMove(row, col-1) == false && illegalMove(row, col+1) != false &&
+					illegalMove(row-1, col) != false) {
 				set('1', row, col-1);
 			}
 			set('$', row, col);
@@ -188,9 +189,10 @@ public class Maze {
 			return null;
 		}
 		else if (countClearSpots(startrow,startcol) == 0 && findPosition('$') != null) {
-			Position Placeholder = findPosition('$');
-			set('1', )
-			return solve(findPosition('$').getRow(), findPosition('$').getColumn(), 
+			Position Placeholder = findPosition('1');
+			set('1', findPosition('$').getRow(), findPosition('$').getColumn());
+			set('.',Placeholder.getRow(), Placeholder.getColumn());
+			return solve(findPosition('1').getRow(), findPosition('1').getColumn(), 
 					Endrow, Endcol);
 		}
 		
@@ -206,22 +208,27 @@ public class Maze {
 		   int currentCol = findPosition('1').getColumn();
 		   recordPositions();
 		//  if we are changing direction 
-		   if (recentMoves.size() > 2) {
-			   if (didChangeDirection() == true) {
+		   if (recentMoves.size() > 2 && didChangeDirection() == true) {
 				   return currentRow + "," + currentCol +
-				   "-" + solve (currentRow, currentCol, Endrow, Endcol);
+				   "-" + solve(currentRow, currentCol, Endrow, Endcol);
 			   }
-		   
+			   else {
+				   return solve(currentRow, currentCol, Endrow, Endcol);
 		   //if no change in direction.
 			
 		   	}
-		   else {
-			   return solve(currentRow, currentCol, Endrow, Endcol);
+			   
 		   }
-		}
+		
 		else {
-			
-			return null;
+			movement(2, startrow, startcol);
+			recordPositions();
+			String results = solve(findPosition('1').getRow(), findPosition('1').getColumn()
+					, Endrow, Endcol);
+			if (results != null) {
+					return findPosition('1').getRow() + "," + findPosition('1').getColumn()
+							+ "-" + result;
+			}
 		}
 		//There are multiple ways to go
 		//
