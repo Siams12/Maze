@@ -80,12 +80,9 @@ public class Maze {
 	private boolean illegalMove(int row, int column) {
 		//returns false if it is a legal move 
 		//returns true if it is an illegal move
-		if(get(row, column)  == ('#')) {
+		if(get(row, column)  == ('#') || get(row,column) == '.' || get(row,column) == '1') {
 			
 		return true;
-		}
-		if (get(row, column) == ('.')) {
-		return true;	
 		}
 		//if(get(row,column) != )
 		return false; 
@@ -112,15 +109,19 @@ public class Maze {
 	//Uses the set method to set the movement 
 	private String calculateMovement(int row, int col) { 
 			if (illegalMove(row+1, col) == false) {
+				set('.', row+1, col);
 				 return "S"; 
 			}
 			if (illegalMove(row-1, col) == false) {
+				set('.', row-1, col);
 				 return "N";
 			}
 			if (illegalMove(row, col+1) == false) {
+				set('.', row, col+1);
 				 return "E";
 			}
 			if (illegalMove(row, col-1) == false) {
+				set('.', row, col-1);
 				return "W";
 			}
 		
@@ -128,28 +129,28 @@ public class Maze {
 		
 	
 	}
-	private void movement(String Direction, int row, int col) {
+	private Position movement(String Direction, int row, int col) {
 		switch(Direction) {
 			case ("S"):  
-			set('1', row+1, col);
-			 set('.', row, col);
-			 break;
+				set('.', row, col);
+			 return new Position(row+1, col);
+			 
 			case("N"):
-			set('1', row-1, col);
-			set('.', row, col);
-			break;
+				set('.', row, col);
+			return new Position(row-1, col);
+			
 			case("E"):
-			set('1', row, col+1);
-			set('.', row, col);
-			break;
+				set('.', row, col);
+			return new Position(row, col+1);
+			
 			case("W"):
-			set('1', row, col-1);
-			set('.', row, col);
-			break;
+				set('.', row, col);
+		    return new Position(row, col-1);
 		}
+		return null;
 	}
 	//returns true if it did change directions.
-	public boolean didChangeDirection(String Direction, String previousDirection) {
+	private boolean didChangeDirection(String Direction, String previousDirection) {
 		if (Direction != previousDirection && previousDirection != null) {
 			return true;
 		}
@@ -187,31 +188,28 @@ return false;
 		// if only one way to go
 		// 	calculate the next spot's coordinates
 		   String Direction = calculateMovement(startrow, startcol);
-		   int oldRow = findPosition('1').getRow();
-		   int oldCol = findPosition('1').getColumn();
-		   movement(Direction, startrow, startcol);
-		   int newRow = findPosition('1').getRow();
-		   int newCol = findPosition('1').getColumn();
+		   Position newCords = movement(Direction, startrow, startcol);
 		   if (didChangeDirection(Direction, previousDirection) == true) {
-				   return oldRow + "," + oldCol +
-				   "-" + solve(newRow, newCol, Endrow, Endcol, Direction);
+				   return startrow + "," + startcol +
+				   "-" + solve(newCords.getRow(), newCords.getColumn(), Endrow, Endcol, Direction);
 			   }
 			   else {
-				   return solve(newRow, newCol, Endrow, Endcol, Direction);
+				   return solve(newCords.getRow(), newCords.getColumn(), Endrow, Endcol, Direction);
 		   //if no change in direction.
 			
 		   	}
 			   
 		   }
 		
-		else {
-			recordPositions();
+		if (countClearSpots(startrow, startcol) >= 2) {
 			String Direction = calculateMovement(startrow, startcol);
-			movement(Direction,startrow,startcol);
-			String results = solve(findPosition('1').getRow(), findPosition('1').getColumn()
+			Position newCords = movement(Direction,startrow,startcol);
+			Direction = calculateMovement(startrow, startcol); 
+			String results = solve(newCords.getRow(), newCords.getColumn()
 					, Endrow, Endcol, Direction);
+			
 			if (results != null) {
-					return findPosition('1').getRow() + "," + findPosition('1').getColumn()
+					return newCords.getRow() + "," + newCords.getColumn()
 							+ "-" + result;
 			}
 		}
@@ -222,6 +220,7 @@ return false;
 		//     results = solve(eastRow, eastCol, endRow, endCol)
 		//
 		//     if results != null
+		
 		//        return eastRow+ "," +eastCol+"-" result
 		
 		//if we can move south

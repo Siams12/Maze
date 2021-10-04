@@ -86,7 +86,6 @@ public class Controller {
 		View View = new View();
 	    Cords cords = mazeController.getCordsOut();
 	    while(cords != null){
-	    mazeController.set('1', cords.getStartRow(), cords.getStartCol());
 	    System.out.println(cords.getStartRow() + "," + cords.getStartCol());
 	    System.out.print(mazeController.solve(cords.getStartRow(), cords.getStartCol(), cords.getEndRow(), cords.getEndCol()
 	    		, null));

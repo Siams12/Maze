@@ -67,23 +67,7 @@ public class MazeTest {
 		Maze maze = new Maze(5,5);
 		
 	}
-	
-	@Test
-	public void testIllegalMove() {
-		Maze maze = new Maze(5,5);
-		maze.set('#', 1, 1);
-		if (maze.illegalMove(1, 1) != true) {
-			fail("Should return true for a value that cannot be moved got " + maze.illegalMove(1, 1));
-		}
-		maze.set('.', 2, 2);
-		if (maze.illegalMove(2, 2)!= true) {
-			fail("Should return true for a value that cannot be moved to got" + maze.illegalMove(2, 2));
-		}
-		maze.set(' ', 3, 3);
-		if (maze.illegalMove(3, 3) != false){
-			fail("Should be able to move there got" + maze.illegalMove(3, 3));
-		}
-	}
+
 	@Test
 	public void testCountClearSpots() {
 		Maze maze = new Maze(5,5);
@@ -111,7 +95,7 @@ public class MazeTest {
 	@Test
 	public void testSolve() {
 		Maze maze = new Maze(5,5);
-		String startAndEnd = maze.solve(1, 1, 1, 1);
+		String startAndEnd = maze.solve(1, 1, 1, 1, "E");
 		if (!startAndEnd .equals("11")) {
 			fail("startAndEnd should equal 11 got " + startAndEnd);
 		}
